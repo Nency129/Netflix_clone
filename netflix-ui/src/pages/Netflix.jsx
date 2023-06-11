@@ -1,36 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import backgroundImage from '../assets/home.jpg';
 import MovieLogo from '../assets/homeTitle.webp';
-import {FaPlay} from "react-icons/fa";
-import {AiOutlineInfoCircle} from "react-icons/ai";
+import { FaPlay } from "react-icons/fa";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchMovies, getGenres } from '../store';
 
 export default function Netflix() {
   const navigate = useNavigate();
-  const [isScrolled,setIsScrolled]=useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  window.onscroll =()=>{
-    setIsScrolled(window.pageYoffset ===0?false:true);
-    return ()=>(window.onscroll =null); 
+  const genresLoaded =useSelector((state)=>state.netflix.genresLoaded);
+  const movies =useSelector((state)=> state.netflix.movies);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getGenres());
+  }, []);
+
+  useEffect(()=>{
+    if(genresLoaded) dispatch(fetchMovies({type:"all"}));
+  });
+
+  window.onscroll = () => {
+    setIsScrolled(window.pageYOffset === 0 ? false : true);
+    return () => (window.onscroll = null);
   };
-  
+
   return (
     <Container>
-      <Navbar isScrolled={isScrolled}/>
+      <Navbar isScrolled={isScrolled} />
       <div className="hero">
-        <img src={backgroundImage} alt='background' className='background-image'/>
+        <img src={backgroundImage} alt='background' className='background-image' />
         <div className="container">
           <div className="logo">
-            <img src={MovieLogo} alt='Movie Logo'/>
+            <img src={MovieLogo} alt='Movie Logo' />
           </div>
           <div className="buttons flex">
-            <button className='flex j-center a-center' onClick={()=>navigate('/player')}>
-              <FaPlay/>Play
+            <button className='flex j-center a-center' onClick={() => navigate('/player')}>
+              <FaPlay />Play
             </button>
             <button className='flex j-center a-center'>
-              <AiOutlineInfoCircle/>More Info
+              <AiOutlineInfoCircle />More Info
             </button>
           </div>
         </div>
