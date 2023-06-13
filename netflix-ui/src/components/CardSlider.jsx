@@ -8,7 +8,7 @@ export default function CardSlider({ data, title }) {
     const [sliderPosition, setSliderPosition] = useState(0);
     const listRef = useRef();
 
-    // movement of slider
+    // movement of Controler
     const handleDirection = (direction) => {
         let distance=listRef.current.getBoundingClientRect().x-70;
         if(direction == "left" && sliderPosition>0){
@@ -19,7 +19,6 @@ export default function CardSlider({ data, title }) {
         if(direction == "right" && sliderPosition<4){
             listRef.current.style.transform =`translateX(${-230+distance}px)`;
             setSliderPosition(sliderPosition+1);
-
         }
      };
     return (
