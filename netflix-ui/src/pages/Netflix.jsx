@@ -26,9 +26,9 @@ function Netflix() {
   }, []);
 
   useEffect(() => {
-    if (genresLoaded) 
-      dispatch(fetchMovies({type: "all" }));
-});
+    if (genresLoaded)
+      dispatch(fetchMovies({ type: "all" }));
+  }, [genresLoaded]);
 
   onAuthStateChanged(firebaseAuth, (currentUser) => {
     if (!currentUser) navigate("/login");
