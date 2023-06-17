@@ -15,11 +15,10 @@ const initialState = {
 export const getGenres = createAsyncThunk("netflix/genres", async () => {
   const {
     data: { genres },
-  } =  await axios.get(`${TMBD_BASE_URL}/genre/movie/list?api_key=${API_KEY}`);
+  } = await axios.get(`${TMBD_BASE_URL}/genre/movie/list?api_key=${API_KEY}`);
   // console.log(data);
   return genres;
 });
-
 
 const createArrayFromRawData = (array, moviesArray, genres) => {
   array.forEach((movie) => {
@@ -28,7 +27,7 @@ const createArrayFromRawData = (array, moviesArray, genres) => {
       const name = genres.find(({ id }) => id === genre);
       if (name) movieGenres.push(name.name);
     });
-    if (movie.backdrop_path) 
+    if (movie.backdrop_path)
       moviesArray.push({
         id: movie.id,
         name: movie?.original_name ? movie.original_name : movie.original_title,
@@ -49,7 +48,6 @@ const getRawData = async (api, genres, paging = false) => {
   return moviesArray;
 };
 
-
 export const fetchMovies = createAsyncThunk(
   "netflix/trending",
   async ({ type }, thunkApi) => {
@@ -67,7 +65,7 @@ export const fetchMovies = createAsyncThunk(
 
 export const fetchDataByGenre = createAsyncThunk(
   "netflix/moviesByGenres",
-  async ({ genre,type }, thunkApi) => {
+  async ({ genre, type }, thunkApi) => {
     const {
       netflix: { genres },
     } = thunkApi.getState();
@@ -76,6 +74,16 @@ export const fetchDataByGenre = createAsyncThunk(
       genres
     );
     // console.log(data);
+  }
+);
+
+export const getUserLikedMovies = createAsyncThunk(
+  "netflix/getLiked",
+  async (email) => {
+    const {
+      data: { movies },
+    } = await axios.get("http://localhost:5000/api/user/liked/${email}");
+    return movies;
   }
 );
 
@@ -91,6 +99,9 @@ const NetflixSlice = createSlice({
       state.movies = action.payload;
     });
     builder.addCase(fetchDataByGenre.fulfilled, (state, action) => {
+      state.movies = action.payload;
+    });
+    builder.addCase(getUserLikedMovies.fulfilled, (state, action) => {
       state.movies = action.payload;
     });
   },
