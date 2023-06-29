@@ -80,10 +80,11 @@ export const fetchDataByGenre = createAsyncThunk(
 export const getUserLikedMovies = createAsyncThunk(
   "netflix/getLiked",
   async (email) => {
+    console.log(email,"email")
     const {
       data: { movies },
-    } = await axios.get("http://localhost:5000/api/user/liked/${email}");
-    return movies;
+    } = await axios.get(`http://localhost:5000/api/user/liked/${email}`);
+    return movies.data;
   }
 );
 
@@ -104,6 +105,7 @@ const NetflixSlice = createSlice({
     builder.addCase(getUserLikedMovies.fulfilled, (state, action) => {
       state.movies = action.payload;
     });
+    
   },
 });
 

@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import video from "../assets/video.mp4";
 import { IoPlayCircleSharp } from "react-icons/io5";
 import { RiThumbUpFill, RiThumbDownFill } from "react-icons/ri";
-
 import { BsCheck } from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BiChevronDown } from "react-icons/bi";
@@ -17,6 +16,7 @@ export default
         const [isHovered, setIsHovered] = useState(false);
         const navigate = useNavigate();
         const [email, setEmail] = useState(undefined);
+        
         onAuthStateChanged(firebaseAuth, (currentUser) => {
             if (currentUser) setEmail(currentUser.email);
             else navigate("/login");
