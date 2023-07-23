@@ -11,19 +11,16 @@ import Card from '../components/Card';
 export default function UserLiked() {
     const [isScrolled, setIsScrolled] = useState(false);
     const movies = useSelector((state) => state.netflix.movies);
-    // console.log("hii", movies.data)
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [email, setEmail] = useState("");
 
     onAuthStateChanged(firebaseAuth, (currentUser) => {
-        console.log("syrrent user", currentUser)
         if (currentUser) setEmail(currentUser.email);
         else navigate("/login");
     });
 
     useEffect(() => {
-        // console.log("useeffect", email)
         if (email) {
             dispatch(getUserLikedMovies(email));
         }
@@ -39,7 +36,7 @@ export default function UserLiked() {
             <div className="content flex column">
                 <h1>My List</h1>
                 <div className="grid flex">
-                    {movies.map((movie, index) => {
+                    {movies?.map((movie, index) => {
                         return (
                             <Card
                                 movieData={movie}

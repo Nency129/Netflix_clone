@@ -12,6 +12,7 @@ const initialState = {
   genres: [],
 };
 
+
 export const getGenres = createAsyncThunk("netflix/genres", async () => {
   const {
     data: { genres },
@@ -80,11 +81,23 @@ export const fetchDataByGenre = createAsyncThunk(
 export const getUserLikedMovies = createAsyncThunk(
   "netflix/getLiked",
   async (email) => {
-    console.log(email,"email")
-    const {
-      data: { movies },
-    } = await axios.get(`http://localhost:5000/api/user/liked/${email}`);
-    return movies.data;
+    console.log(email)
+    const data = await axios.get(
+      `http://localhost:5000/api/user/liked/${email}`
+    );
+    return data.data.movie;
+  }
+);
+
+export const removeFromLikedMovies = createAsyncThunk(
+  "netflix/deleteLiked",
+  async ({email, movieId}) => {
+    alert("movie removed from list");
+    const data = await axios.put(`http://localhost:5000/api/user/delete`, {
+      email,
+      movieId,
+    });
+    return data.data.movies;
   }
 );
 
@@ -105,7 +118,9 @@ const NetflixSlice = createSlice({
     builder.addCase(getUserLikedMovies.fulfilled, (state, action) => {
       state.movies = action.payload;
     });
-    
+    builder.addCase(removeFromLikedMovies.fulfilled, (state, action) => {
+      state.movies = action.payload;
+    });
   },
 });
 
